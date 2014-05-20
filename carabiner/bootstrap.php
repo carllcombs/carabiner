@@ -97,7 +97,7 @@ define('ENV', $env);
  |---------------------------------------------------------------------
  |
  */
-$config = new \Config\Config(APPPATH . "/config");
+$config = new \Sinergi\Config\Config(APPPATH . "/config");
 $config->setEnvironment(ENV);
 
 /*
