@@ -1,0 +1,52 @@
+#! /usr/local/bin/php
+<?php
+
+/*
+ |---------------------------------------------------------------------
+ | Launch Carabiner.
+ |---------------------------------------------------------------------
+ |
+ */
+require_once ( 'bootstrap.php' );
+
+$console = new \Symfony\Component\Console\Application('Carabiner Console! Awwww Yisss!', VERSION);
+// $output = new ConsoleOutput();
+// $console->setCatchExceptions(true);
+
+$helperSet = new Symfony\Component\Console\Helper\HelperSet(array(
+    'db'        => new Doctrine\DBAL\Tools\Console\Helper\ConnectionHelper($doctrine->em->getConnection()),
+    'em'        => new Doctrine\ORM\Tools\Console\Helper\EntityManagerHelper($doctrine->em),
+    'dialog'    => new Symfony\Component\Console\Helper\DialogHelper(),
+    'formatter' => new Symfony\Component\Console\Helper\FormatterHelper(),
+    'progress'  => new Symfony\Component\Console\Helper\ProgressHelper(),
+    'table'     => new Symfony\Component\Console\Helper\TableHelper(),
+));
+
+// $console->setCatchExceptions(true);
+$console->setHelperSet($helperSet);
+
+// add some extra commands to the console
+$console->addCommands(array(
+    // DBAL Commands
+    new Doctrine\DBAL\Tools\Console\Command\RunSqlCommand(),
+    new Doctrine\DBAL\Tools\Console\Command\ImportCommand(),
+    // ORM Commands
+    new Doctrine\ORM\Tools\Console\Command\ClearCache\MetadataCommand(),
+    new Doctrine\ORM\Tools\Console\Command\ClearCache\ResultCommand(),
+    new Doctrine\ORM\Tools\Console\Command\ClearCache\QueryCommand(),
+    new Doctrine\ORM\Tools\Console\Command\SchemaTool\CreateCommand(),
+    new Doctrine\ORM\Tools\Console\Command\SchemaTool\UpdateCommand(),
+    new Doctrine\ORM\Tools\Console\Command\SchemaTool\DropCommand(),
+    new Doctrine\ORM\Tools\Console\Command\EnsureProductionSettingsCommand(),
+    new Doctrine\ORM\Tools\Console\Command\ConvertDoctrine1SchemaCommand(),
+    new Doctrine\ORM\Tools\Console\Command\GenerateRepositoriesCommand(),
+    new Doctrine\ORM\Tools\Console\Command\GenerateEntitiesCommand(),
+    new Doctrine\ORM\Tools\Console\Command\GenerateProxiesCommand(),
+    new Doctrine\ORM\Tools\Console\Command\ConvertMappingCommand(),
+    new Doctrine\ORM\Tools\Console\Command\RunDqlCommand(),
+    new Doctrine\ORM\Tools\Console\Command\ValidateSchemaCommand(),
+    // Datafixtures
+    new Carabiner\Command\LoadDataFixturesCommand(),
+));
+
+$console->run(new \Symfony\Component\Console\Input\ArgvInput());
